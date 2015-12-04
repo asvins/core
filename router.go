@@ -4,12 +4,13 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/asvins/common_interceptors/logger"
 	"github.com/asvins/router"
+	"github.com/asvins/router/errors"
+	"github.com/asvins/router/logger"
 	"github.com/unrolled/render"
 )
 
-func DiscoveryHandler(w http.ResponseWriter, req *http.Request) {
+func DiscoveryHandler(w http.ResponseWriter, req *http.Request) errors.Http {
 	prefix := strings.Join([]string{ServerConfig.Server.Addr, ServerConfig.Server.Port}, ":")
 	r := render.New()
 
@@ -17,6 +18,7 @@ func DiscoveryHandler(w http.ResponseWriter, req *http.Request) {
 	discoveryMap := map[string]string{"discovery": prefix + "/api/discovery"}
 
 	r.JSON(w, http.StatusOK, discoveryMap)
+	return nil
 }
 
 func DefRoutes() *router.Router {

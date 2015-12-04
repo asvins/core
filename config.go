@@ -15,3 +15,8 @@ type Config struct {
 		SSLMode string
 	}
 }
+
+func GetServiceBaseURI(name string) string {
+	mapping := map[string]string{"auth": "http://localhost:8001"}
+	return mapping[name]
+}

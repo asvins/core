@@ -9,7 +9,7 @@ type Medic struct {
 	CPF       string `json:"cpf" gorm:"column:cpf"`
 	Specialty string `json:"specialty" gorm:"column:specialty"`
 	Email     string `json:"email" gorm:"column:email"`
-	Avatar    []byte `json:"avatar" gorm:"column:avatar"`
+	Avatar    string `json:"avatar" gorm:"column:avatar"`
 }
 
 func (m *Medic) Create() error {

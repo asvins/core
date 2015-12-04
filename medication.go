@@ -34,6 +34,21 @@ type Medication struct {
 	Manufacturer    string `json:"manufacturer"`
 }
 
+// Struct that will be used as intermediate on controlllers
+type IntermediateMedication struct {
+	ID              int    `json:"id"`
+	ActiveAgent     string `json:"active_agent"`
+	Label           int    `json:"label"`
+	Dosage          string `json:"dosage"`
+	Bula            string `json:"bula"` // sei lá como é bula em inglês...
+	Type            int    `json:"type"`
+	IntekeMean      int    `json:"intake_mean"`
+	Name            string `json:"name"`
+	BrRegister      string `json:"br_register"`
+	TerapeuticClass string `json:"terapeutic_class"`
+	Manufacturer    string `json:"manufacturer"`
+}
+
 func (m *Medication) Save() error {
 	return db.Create(m).Error
 }

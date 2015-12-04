@@ -7,15 +7,9 @@ import (
 	"github.com/asvins/warehouse/decoder"
 )
 
-type QueryMapping func(url.Values) url.Values
-
-func BuildStructFromQueryString(dst interface{}, queryString url.Values, mappingfs ...QueryMapping) error {
-	v := queryString
-	for _, f := range mappingfs {
-		v = f(v)
-	}
+func BuildStructFromQueryString(dst interface{}, queryString url.Values) error {
 	decoder := decoder.NewDecoder()
-	return decoder.DecodeURLValues(dst, v)
+	return decoder.DecodeURLValues(dst, queryString)
 }
 
 func BuildStructFromReqBody(dst interface{}, body io.ReadCloser) error {

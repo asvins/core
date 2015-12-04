@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -38,13 +39,15 @@ func retreiveMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func insertMedication(w http.ResponseWriter, r *http.Request) errors.Http {
-	m := Medication{}
-	if err := BuildStructFromReqBody(&m, r.Body); err != nil {
+	im := IntermediateMedication{}
+	if err := BuildStructFromReqBody(&im, r.Body); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
+	m := im.Medication()
+
 	if err := m.Save(); err != nil {
-		return errors.BadRequest(err.Error())
+		return errors.InternalServerError(err.Error())
 	}
 
 	rend.JSON(w, http.StatusOK, m)
@@ -52,18 +55,22 @@ func insertMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func updateMedication(w http.ResponseWriter, r *http.Request) errors.Http {
-	m := Medication{}
+	im := IntermediateMedication{}
 
-	if err := BuildStructFromReqBody(&m, r.Body); err != nil {
+	if err := BuildStructFromReqBody(&im, r.Body); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
-	if err := FillMedicationIdWIthUrlValue(&m, r.URL.Query()); err != nil {
+	m := im.Medication()
+
+	if err := FillMedicationIdWIthUrlValue(m, r.URL.Query()); err != nil {
 		return errors.BadRequest(err.Error())
 	}
+
+	fmt.Println(m)
 
 	if err := m.Update(); err != nil {
-		return errors.BadRequest(err.Error())
+		return errors.InternalServerError(err.Error())
 	}
 
 	rend.JSON(w, http.StatusOK, m)
@@ -77,7 +84,7 @@ func deleteMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 	}
 
 	if err := m.Delete(); err != nil {
-		return errors.BadRequest(err.Error())
+		return errors.InternalServerError(err.Error())
 	}
 
 	rend.JSON(w, http.StatusOK, m)

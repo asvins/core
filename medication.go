@@ -21,16 +21,17 @@ const (
 
 // Medication struct
 type Medication struct {
-	ActiveAgent     string
-	Label           int
-	Dosage          string
-	Bula            string // sei lá como é bula em inglês...
-	Type            int
-	IntekeMeans     int
-	Name            string
-	BrRegister      string
-	TerapeuticClass string
-	Manufector      string
+	ID              int    `json:"id"`
+	ActiveAgent     string `json:"active_agent"`
+	Label           int    `json:"label"`
+	Dosage          string `json:"dosage"`
+	Bula            string `json:"bula"` // sei lá como é bula em inglês...
+	Type            int    `json:"type"`
+	IntekeMean      int    `json:"intake_mean"`
+	Name            string `json:"name"`
+	BrRegister      string `json:"br_register"`
+	TerapeuticClass string `json:"terapeutic_class"`
+	Manufacturer    string `json:"manufacturer"`
 }
 
 func (m *Medication) Save() error {
@@ -38,13 +39,15 @@ func (m *Medication) Save() error {
 }
 
 func (m *Medication) Update() error {
-	return nil
+	return db.Update(m).Error
 }
 
 func (m *Medication) Delete() error {
-	return nil
+	return db.Delete(m).Error
 }
 
-func (m *Medication) Retreive() error {
-	return nil
+func (m *Medication) Retreive() ([]Medication, error) {
+	var medications []Medication
+	err := db.Where(m).Find(&medications).Error
+	return medications, err
 }

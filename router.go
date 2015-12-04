@@ -46,10 +46,10 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/patient/:patient_id/feed", router.GET, DiscoveryHandler, []router.Interceptor{})
 
 	//PHARMACIST
-	r.Handle("/api/medications", router.GET, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medications", router.PUT, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medications", router.DELETE, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medications", router.POST, DiscoveryHandler, []router.Interceptor{})
+	r.Handle("/api/medications", router.GET, retreiveMedication, []router.Interceptor{})
+	r.Handle("/api/medications", router.PUT, updateMedication, []router.Interceptor{})
+	r.Handle("/api/medications", router.DELETE, deleteMedication, []router.Interceptor{})
+	r.Handle("/api/medications", router.POST, insertMedication, []router.Interceptor{})
 
 	r.Handle("/api/patient/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de medico
 	// interceptors

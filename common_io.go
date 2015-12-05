@@ -22,7 +22,6 @@ func setupCommonIo() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer producer.TearDown()
 
 	/*
 	*	Consumer
@@ -33,8 +32,6 @@ func setupCommonIo() {
 	//if err = consumer.StartListening(); err != nil {
 	//	log.Fatal(err)
 	//}
-
-	//defer consumer.TearDown()
 
 }
 

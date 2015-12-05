@@ -1,15 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/asvins/common_interceptors/logger"
 	"github.com/asvins/router"
+	"github.com/asvins/router/errors"
 	"github.com/unrolled/render"
 )
 
-func DiscoveryHandler(w http.ResponseWriter, req *http.Request) {
+func DiscoveryHandler(w http.ResponseWriter, req *http.Request) errors.Http {
 	prefix := strings.Join([]string{ServerConfig.Server.Addr, ServerConfig.Server.Port}, ":")
 	r := render.New()
 
@@ -17,6 +18,16 @@ func DiscoveryHandler(w http.ResponseWriter, req *http.Request) {
 	discoveryMap := map[string]string{"discovery": prefix + "/api/discovery"}
 
 	r.JSON(w, http.StatusOK, discoveryMap)
+	return nil
+}
+
+func fetchRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
+	rend := render.New()
+	treatmentId := r.URL.Query().Get("treatment_id")
+	imgPath := r.URL.Path[len("/api/receipt"):]
+	fmt.Println(imgPath + treatmentId)
+	rend.JSON(w, 200, "{}")
+	return nil
 }
 
 func DefRoutes() *router.Router {
@@ -26,7 +37,7 @@ func DefRoutes() *router.Router {
 
 	//MEDIC
 	r.Handle("/api/medic/:medic_id/profile", router.GET, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medic/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de farmaceutico
+	r.Handle("/api/medic/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de farmaceutico //DONE
 
 	//TREATMENTS
 	r.Handle("/api/treatments", router.GET, DiscoveryHandler, []router.Interceptor{})
@@ -36,12 +47,12 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/treatments/:treatment_id/ship", router.POST, DiscoveryHandler, []router.Interceptor{})
 
 	//RECEIPT
-	r.Handle("/api/receipt/:treatment_id", router.GET, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/receipt/:treatment_id/validate", router.PUT, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/receipt/:treatment_id", router.POST, DiscoveryHandler, []router.Interceptor{})
+	r.Handle("/api/receipt/:treatment_id", router.GET, fetchRecipe, []router.Interceptor{})               // TODO: VINIX
+	r.Handle("/api/receipt/:treatment_id/validate", router.PUT, DiscoveryHandler, []router.Interceptor{}) // TODO: VINIX
+	r.Handle("/api/receipt/:treatment_id", router.POST, DiscoveryHandler, []router.Interceptor{})         // TODO: VINIX
 
 	//PATIENT
-	r.Handle("/api/patient/:patient_id/feed", router.GET, DiscoveryHandler, []router.Interceptor{})
+	r.Handle("/api/patient/:patient_id/feed", router.GET, DiscoveryHandler, []router.Interceptor{}) // TODO: VINIX
 
 	//PHARMACIST
 	r.Handle("/api/medications", router.GET, DiscoveryHandler, []router.Interceptor{})
@@ -51,6 +62,6 @@ func DefRoutes() *router.Router {
 
 	r.Handle("/api/patient/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de medico
 	// interceptors
-	r.AddBaseInterceptor("/", logger.NewLogger())
+	// r.AddBaseInterceptor("/", logger.NewLogger())
 	return r
 }

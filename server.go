@@ -11,6 +11,7 @@ import (
 )
 
 var ServerConfig *Config = new(Config)
+
 // var DatabaseConfig *postgres.Config
 
 // function that will run before main

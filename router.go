@@ -7,17 +7,17 @@ import (
 
 	"github.com/asvins/router"
 	"github.com/asvins/router/errors"
+	"github.com/asvins/router/logger"
 	"github.com/unrolled/render"
 )
 
 func DiscoveryHandler(w http.ResponseWriter, req *http.Request) errors.Http {
 	prefix := strings.Join([]string{ServerConfig.Server.Addr, ServerConfig.Server.Port}, ":")
-	r := render.New()
 
 	//add discovery links here
 	discoveryMap := map[string]string{"discovery": prefix + "/api/discovery"}
 
-	r.JSON(w, http.StatusOK, discoveryMap)
+	rend.JSON(w, http.StatusOK, discoveryMap)
 	return nil
 }
 
@@ -55,13 +55,13 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/patient/:patient_id/feed", router.GET, DiscoveryHandler, []router.Interceptor{}) // TODO: VINIX
 
 	//PHARMACIST
-	r.Handle("/api/medications", router.GET, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medications", router.PUT, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medications", router.DELETE, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medications", router.POST, DiscoveryHandler, []router.Interceptor{})
+	r.Handle("/api/medications", router.GET, retreiveMedication, []router.Interceptor{})
+	r.Handle("/api/medications/:id", router.PUT, updateMedication, []router.Interceptor{})
+	r.Handle("/api/medications/:id", router.DELETE, deleteMedication, []router.Interceptor{})
+	r.Handle("/api/medications", router.POST, insertMedication, []router.Interceptor{})
 
 	r.Handle("/api/patient/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de medico
 	// interceptors
-	// r.AddBaseInterceptor("/", logger.NewLogger())
+	r.AddBaseInterceptor("/", logger.NewLogger())
 	return r
 }

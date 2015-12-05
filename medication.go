@@ -1,5 +1,7 @@
 package main
 
+import "strconv"
+
 // Medication possible labels
 const (
 	MEDICATION_LABEL_NONE = iota
@@ -92,12 +94,16 @@ type Medication struct {
 	Manufacturer    string `json:"manufacturer"`
 }
 
+func (m *Medication) String() string {
+	return "ID: " + strconv.Itoa(m.ID) + " Name: " + m.Name + " ActiveAgent: " + m.ActiveAgent
+}
+
 func (m *Medication) Save() error {
 	return db.Create(m).Error
 }
 
 func (m *Medication) Update() error {
-	return db.Update(m).Error
+	return db.Save(m).Error
 }
 
 func (m *Medication) Delete() error {

@@ -48,7 +48,7 @@ func DefRoutes() *router.Router {
 	//PHARMACIST
 	r.Handle("/api/medications", router.GET, retreiveMedication, []router.Interceptor{})
 	r.Handle("/api/medications/:id", router.PUT, updateMedication, []router.Interceptor{})
-	r.Handle("/api/medications", router.DELETE, deleteMedication, []router.Interceptor{})
+	r.Handle("/api/medications/:id", router.DELETE, deleteMedication, []router.Interceptor{})
 	r.Handle("/api/medications", router.POST, insertMedication, []router.Interceptor{})
 
 	r.Handle("/api/patient/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de medico

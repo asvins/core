@@ -67,7 +67,7 @@ func updateMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.BadRequest(err.Error())
 	}
 
-	fmt.Println(m)
+	fmt.Printf("%v\n", m)
 
 	if err := m.Update(); err != nil {
 		return errors.InternalServerError(err.Error())
@@ -87,6 +87,6 @@ func deleteMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.InternalServerError(err.Error())
 	}
 
-	rend.JSON(w, http.StatusOK, m)
+	rend.JSON(w, http.StatusOK, m.ID)
 	return nil
 }

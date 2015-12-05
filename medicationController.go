@@ -25,6 +25,8 @@ func retreiveMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.BadRequest(err.Error())
 	}
 
+	m.Base.Query = r.URL.Query()
+
 	medications, err := m.Retreive()
 	if err != nil {
 		return errors.BadRequest(err.Error())

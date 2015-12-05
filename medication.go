@@ -82,6 +82,7 @@ func (im *IntermediateMedication) Medication() *Medication {
 
 // Medication struct
 type Medication struct {
+	Base
 	ID              int    `json:"id"`
 	ActiveAgent     string `json:"active_agent"`
 	Label           int    `json:"label"`
@@ -112,6 +113,7 @@ func (m *Medication) Delete() error {
 
 func (m *Medication) Retreive() ([]Medication, error) {
 	var medications []Medication
-	err := db.Where(m).Find(&medications).Error
+
+	err := db.Where(m).Find(&medications, m.Base.BuildQuery()).Error
 	return medications, err
 }

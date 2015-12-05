@@ -1,23 +1,32 @@
 package main
 
 /*
-*	TODO
+*	Pharmaceutic struct
  */
 type Pharmaceutic struct {
+	Base
+	Name      string `json:"name"`
+	CPF       string `json:"cpf" gorm:"column:cpf"`
+	Specialty string `json:"specialty"`
+	Email     string `json:"email"`
+	Avatar    string `json:"avatar"`
 }
 
-func (t *Pharmaceutic) Save() error {
-	return nil
+func (p *Pharmaceutic) Save() error {
+	return db.Create(p).Error
 }
 
-func (t *Pharmaceutic) Update() error {
-	return nil
+func (p *Pharmaceutic) Update() error {
+	return db.Save(p).Error
 }
 
-func (t *Pharmaceutic) Delete() error {
-	return nil
+func (p *Pharmaceutic) Delete() error {
+	return db.Delete(p).Error
 }
 
-func (t *Pharmaceutic) Retreive() ([]Pharmaceutic, error) {
-	return nil, nil
+func (p *Pharmaceutic) Retreive() ([]Pharmaceutic, error) {
+	var ps []Pharmaceutic
+
+	err := db.Where(p).Find(&ps, p.Base.BuildQuery()).Error
+	return ps, err
 }

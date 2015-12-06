@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 
+	"github.com/asvins/auth/models"
 	"github.com/asvins/common_io"
 	"github.com/asvins/utils/config"
 )
@@ -27,14 +29,33 @@ func setupCommonIo() {
 	/*
 	*	Consumer
 	 */
-	//consumer = common_io.NewConsumer(cfg)
-	//consumer.HandleTopic("", nil)
+	consumer = common_io.NewConsumer(cfg)
+	consumer.HandleTopic("user_created", userCreated)
 
-	//if err = consumer.StartListening(); err != nil {
-	//	log.Fatal(err)
-	//}
+	if err = consumer.StartListening(); err != nil {
+		log.Fatal(err)
+	}
 
-	//defer consumer.TearDown()
+	defer consumer.TearDown()
+
+}
+
+func userCreated(msg []byte) {
+	var usr models.User
+	json.Unmarshal(msg, &usr)
+	switch usr.Scope {
+	case "patient":
+		p := Patient{Name: usr.FirstName + usr.LastName, Email: usr.Email}
+		p.Create()
+	case "medic":
+		m := Medic{Name: usr.FirstName + usr.LastName, Email: usr.Email}
+		m.Create()
+	case "pharmacist":
+		p := Pharmacist{Name: usr.FirstName + usr.LastName, Email: usr.Email}
+		p.Create()
+	default:
+		break
+	}
 
 }
 

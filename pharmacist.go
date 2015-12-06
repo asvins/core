@@ -25,3 +25,7 @@ func FindPharmacistByID(id string, m Pharmacist) error {
 func ListPharmacists(ms []Pharmacist) error {
 	return db.Where("").Find(&ms).Error
 }
+
+func FindPharmacistByEmail(email string, m Patient) error {
+	return db.Where("email = ?", email).First(&m).Error
+}

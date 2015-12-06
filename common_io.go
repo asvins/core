@@ -40,6 +40,8 @@ func setupCommonIo() {
 
 }
 
+// HANDLERS
+
 func userCreated(msg []byte) {
 	var usr models.User
 	json.Unmarshal(msg, &usr)
@@ -56,6 +58,18 @@ func userCreated(msg []byte) {
 	default:
 		break
 	}
+}
+
+func userUpdated(msg []byte) {
+	var usr models.User
+	json.Unmarshal(msg, &usr)
+	// update user: COMO PEGAR OS EMAILS ANTIGOS??
+	switch usr.Scope {
+	case "patient":
+	case "medic":
+	case "pharmacist":
+	default:
+		break
 
 }
 

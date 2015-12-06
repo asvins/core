@@ -27,3 +27,7 @@ func FindMedicByID(id string, m Medic) error {
 func ListMedics(ms []Medic) error {
 	return db.Where("").Find(&ms).Error
 }
+
+func FindMedicByEmail(email string, m Patient) error {
+	return db.Where("email = ?", email).First(&m).Error
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -43,6 +44,7 @@ func uploadRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 	treatmentId := r.URL.Query().Get("treatment_id")
 	file, _, err := r.FormFile("receipt")
 	if err != nil {
+		fmt.Println(err)
 		return errors.BadRequest("Invalid file")
 	}
 
@@ -53,9 +55,11 @@ func uploadRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 	rcpt.Create()
 	rcpt.FilePath = "upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID))
 	rcpt.Save() // ID incremental :'(
-	os.MkdirAll("upload/"+treatmentId, 0644)
-	out, _ := os.Create("upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID)))
+	os.MkdirAll("upload/"+treatmentId, 0777)
+	out, err := os.Create("upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID)))
+	fmt.Println(err)
 	_, err = io.Copy(out, file)
+	fmt.Println(err)
 	if err != nil {
 		return errors.InternalServerError("Error uploading image")
 	}

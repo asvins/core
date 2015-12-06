@@ -5,6 +5,7 @@ CREATE TABLE medics (
 	crm TEXT,
 	specialty TEXT,
 	created_at TIMESTAMP WITHOUT TIME ZONE,
+	deleted_at TIMESTAMP WITHOUT TIME ZONE,
 	updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
@@ -28,6 +29,7 @@ CREATE TABLE receipts (
 	status int,
 	file_path TEXT,
 	created_at TIMESTAMP WITHOUT TIME ZONE,
+	deleted_at TIMESTAMP WITHOUT TIME ZONE,
 	updated_at TIMESTAMP WITHOUT TIME ZONE
 )
 	

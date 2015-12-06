@@ -14,7 +14,7 @@ func (r *Receipt) Create() error {
 }
 
 func (r *Receipt) Save() error {
-	db.Save(r).Error
+	return db.Save(r).Error
 }
 
 func (r *Receipt) UpdateStatus(status int) error {

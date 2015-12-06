@@ -41,22 +41,24 @@ func fetchRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 
 func uploadRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 	treatmentId := r.URL.Query().Get("treatment_id")
-	file, header, err := r.FormFile("receipt")
+	file, _, err := r.FormFile("receipt")
 	if err != nil {
 		return errors.BadRequest("Invalid file")
 	}
 
 	defer file.Close()
 
-	r := &Receipt{TreatmentID: strconv.Atoi(treatmentId), FilePath: "", Status: ReceiptStatusUndecided}
-	r.Create()
-	r.FilePath = "upload/" + treatmentId + "/" + r.ID
-	r.Save() // ID incremental :'(
+	id, _ := strconv.Atoi(treatmentId)
+	rcpt := &Receipt{TreatmentID: id, FilePath: "", Status: ReceiptStatusUndecided}
+	rcpt.Create()
+	rcpt.FilePath = "upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID))
+	rcpt.Save() // ID incremental :'(
 	os.MkdirAll("upload/"+treatmentId, 0644)
-	out, _ := os.Create("upload/" + treatmentId + "/" + r.ID)
+	out, _ := os.Create("upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID)))
 	_, err = io.Copy(out, file)
 	if err != nil {
 		return errors.InternalServerError("Error uploading image")
 	}
-	rend.JSON(w, 200, r)
+	rend.JSON(w, 200, rcpt)
+	return nil
 }

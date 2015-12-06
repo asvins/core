@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/asvins/router"
 	"github.com/asvins/router/errors"
 	"github.com/asvins/router/logger"
-	"github.com/unrolled/render"
 )
 
 func DiscoveryHandler(w http.ResponseWriter, req *http.Request) errors.Http {
@@ -18,15 +16,6 @@ func DiscoveryHandler(w http.ResponseWriter, req *http.Request) errors.Http {
 	discoveryMap := map[string]string{"discovery": prefix + "/api/discovery"}
 
 	rend.JSON(w, http.StatusOK, discoveryMap)
-	return nil
-}
-
-func fetchRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
-	rend := render.New()
-	treatmentId := r.URL.Query().Get("treatment_id")
-	imgPath := r.URL.Path[len("/api/receipt"):]
-	fmt.Println(imgPath + treatmentId)
-	rend.JSON(w, 200, "{}")
 	return nil
 }
 
@@ -47,9 +36,9 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/treatments/:treatment_id/ship", router.POST, DiscoveryHandler, []router.Interceptor{})
 
 	//RECEIPT
-	r.Handle("/api/receipt/:treatment_id", router.GET, fetchRecipe, []router.Interceptor{})               // TODO: VINIX
-	r.Handle("/api/receipt/:treatment_id/validate", router.PUT, DiscoveryHandler, []router.Interceptor{}) // TODO: VINIX
-	r.Handle("/api/receipt/:treatment_id", router.POST, DiscoveryHandler, []router.Interceptor{})         // TODO: VINIX
+	r.Handle("/api/receipt/:treatment_id", router.GET, fetchRecipe, []router.Interceptor{})
+	r.Handle("/api/receipt/:treatment_id/validate", router.PUT, validateRecipe, []router.Interceptor{})
+	r.Handle("/api/receipt/:treatment_id", router.POST, uploadRecipe, []router.Interceptor{})
 
 	//PATIENT
 	r.Handle("/api/patient/:patient_id/feed", router.GET, DiscoveryHandler, []router.Interceptor{}) // TODO: VINIX

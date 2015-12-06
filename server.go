@@ -42,7 +42,7 @@ func init() {
 	/*
 	*	Common io
 	 */
-	setupCommonIo()
+	//	setupCommonIo()
 }
 
 func main() {

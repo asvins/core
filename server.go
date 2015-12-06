@@ -12,7 +12,6 @@ import (
 	"github.com/unrolled/render"
 )
 
-// var DatabaseConfig *postgres.Config
 var (
 	ServerConfig *Config        = new(Config)
 	rend         *render.Render = render.New()
@@ -42,7 +41,7 @@ func init() {
 	/*
 	*	Common io
 	 */
-	//	setupCommonIo()
+	setupCommonIo()
 }
 
 func main() {

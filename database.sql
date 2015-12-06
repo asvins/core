@@ -3,7 +3,6 @@ CREATE TABLE medics (
 	cpf TEXT,
 	name TEXT,
 	crm TEXT,
-	cpf TEXT,
 	specialty TEXT,
 	created_at TIMESTAMP WITHOUT TIME ZONE,
 	updated_at TIMESTAMP WITHOUT TIME ZONE

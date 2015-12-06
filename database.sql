@@ -3,10 +3,9 @@ CREATE TABLE medics (
 	cpf TEXT,
 	name TEXT,
 	crm TEXT,
-	cpf TEXT,
-	avatar BLOB,
 	specialty TEXT,
 	created_at TIMESTAMP WITHOUT TIME ZONE,
+	deleted_at TIMESTAMP WITHOUT TIME ZONE,
 	updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
@@ -23,3 +22,14 @@ CREATE TABLE medications (
 	terapeutic_class TEXT,
 	manufacturer TEXT
 );
+
+CREATE TABLE receipts (
+	id serial primary key,
+	treatment_id INTEGER,
+	status int,
+	file_path TEXT,
+	created_at TIMESTAMP WITHOUT TIME ZONE,
+	deleted_at TIMESTAMP WITHOUT TIME ZONE,
+	updated_at TIMESTAMP WITHOUT TIME ZONE
+)
+	

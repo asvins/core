@@ -2,13 +2,58 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 
-	"github.com/asvins/auth/models"
+	authModels "github.com/asvins/auth/models"
 	"github.com/asvins/common_io"
 	"github.com/asvins/utils/config"
+	warehouseModels "github.com/asvins/warehouse/models"
 )
+
+const (
+	EVENT_CREATED = iota
+	EVENT_UPDATED
+	EVENT_DELETED
+)
+
+func topic(event int, prefix string) (string, error) {
+	var sufix string
+
+	switch event {
+	case EVENT_CREATED:
+		sufix = "_created"
+	case EVENT_UPDATED:
+		sufix = "_updated"
+	case EVENT_DELETED:
+		sufix = "_deleted"
+	default:
+		return "", errors.New("[ERROR] Event not found")
+	}
+
+	return prefix + sufix, nil
+}
+
+func fireEvent(event int, m *Medication) {
+	p := warehouseModels.Product{}
+	p.Name = m.Name
+	p.ID = m.ID
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		// TODO tratar erro
+		return
+	}
+
+	topic, err := topic(event, "product")
+	if err != nil {
+		// TODO tratar erro
+		return
+	}
+
+	producer.Publish(topic, b)
+}
 
 func setupCommonIo() {
 	cfg := common_io.Config{}
@@ -54,7 +99,7 @@ func setupCommonIo() {
  */
 
 func handleUserCreated(msg []byte) {
-	var usr models.User
+	var usr authModels.User
 	err := json.Unmarshal(msg, &usr)
 
 	if err != nil {

@@ -4,9 +4,9 @@ import "github.com/jinzhu/gorm"
 
 type Receipt struct {
 	gorm.Model
-	TreatmentID int    `gorm:"column:treatment_id"`
-	FilePath    string `gorm:"column:file_path"`
-	Status      int    `gorm:"column:status"`
+	TreatmentID int    `json:"treatment_id" gorm:"column:treatment_id"`
+	FilePath    string `json:"file_path" gorm:"column:file_path"`
+	Status      int    `json:"status" gorm:"column:status"`
 }
 
 func (r *Receipt) Create() error {

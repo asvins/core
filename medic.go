@@ -12,9 +12,10 @@ type Medic struct {
 	Avatar    string `json:"avatar" gorm:"column:avatar"`
 }
 
-// func (m *Medic) Create() error {
-// 	return db.Create(m).Error
-// }
+func (m *Medic) Create() error {
+	return db.Create(m).Error
+}
+
 //
 // func (m *Medic) Update() error {
 // 	return db.Save(m).Error

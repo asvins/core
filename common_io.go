@@ -35,19 +35,24 @@ func setupCommonIo() {
 	/*
 	*	Topics
 	 */
-
-	// users (patient, medic, pharmaceutic)
 	consumer.HandleTopic("user_created", handleUserCreated)
-
-	// medication TODO
-	consumer.HandleTopic("medication_created", nil)
-	consumer.HandleTopic("medication_updated", nil)
-	consumer.HandleTopic("medication_deleted", nil)
 
 	if err = consumer.StartListening(); err != nil {
 		log.Fatal(err)
 	}
+}
 
+func userUpdated(msg []byte) {
+	var usr authModels.User
+	json.Unmarshal(msg, &usr)
+	// update user: COMO PEGAR OS EMAILS ANTIGOS??
+	switch usr.Scope {
+	case "patient":
+	case "medic":
+	case "pharmacist":
+	default:
+		break
+	}
 }
 
 /*

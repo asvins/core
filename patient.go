@@ -1,5 +1,11 @@
 package main
 
+const (
+	GenderMale = iota
+	GenderFemale
+	GenderOther
+)
+
 /*
 *	Patient struct
  */
@@ -25,6 +31,10 @@ func (p *Patient) Update() error {
 
 func (p *Patient) Delete() error {
 	return db.Delete(p).Error
+}
+
+func FindPatientByID(id string, m Patient) error {
+	return db.Where("id = ?").First(&m).Error
 }
 
 func (p *Patient) Retreive() ([]Patient, error) {

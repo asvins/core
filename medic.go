@@ -16,15 +16,18 @@ func (m *Medic) Create() error {
 	return db.Create(m).Error
 }
 
-//
-// func (m *Medic) Update() error {
-// 	return db.Save(m).Error
-// }
-//
-// func FindMedicByID(id string, m Medic) error {
-// 	return db.Where("id = ?").First(&m).Error
-// }
-//
-// func ListMedics(ms []Medic) error {
-// 	return db.Where("").Find(&ms).Error
-// }
+func (m *Medic) Update() error {
+	return db.Save(m).Error
+}
+
+func FindMedicByID(id string, m Medic) error {
+	return db.Where("id = ?").First(&m).Error
+}
+
+func ListMedics(ms []Medic) error {
+	return db.Where("").Find(&ms).Error
+}
+
+func FindMedicByEmail(email string, m Patient) error {
+	return db.Where("email = ?", email).First(&m).Error
+}

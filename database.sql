@@ -32,4 +32,26 @@ CREATE TABLE receipts (
 	deleted_at TIMESTAMP WITHOUT TIME ZONE,
 	updated_at TIMESTAMP WITHOUT TIME ZONE
 )
+
+CREATE TABLE patients (
+  id serial primary key,
+	cpf TEXT,
+	name TEXT,
+	email TEXT,
+	medical_history TEXT,
+	Weight TEXT,
+	Gender INTEGER,
+	created_at TIMESTAMP WITHOUT TIME ZONE,
+	deleted_at TIMESTAMP WITHOUT TIME ZONE,
+	updated_at TIMESTAMP WITHOUT TIME ZONE
+)
 	
+CREATE TABLE pharmacists (
+  id serial primary key,
+	crf TEXT,
+	name TEXT,
+	email TEXT,
+	created_at TIMESTAMP WITHOUT TIME ZONE,
+	deleted_at TIMESTAMP WITHOUT TIME ZONE,
+	updated_at TIMESTAMP WITHOUT TIME ZONE
+)

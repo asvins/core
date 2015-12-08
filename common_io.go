@@ -95,7 +95,7 @@ func handleUserCreated(msg []byte) {
 
 		return
 
-	case "pharmaceutic":
+	case "pharmacist":
 		p := Pharmacist{}
 		p.ID = usr.ID
 		p.Name = usr.FirstName + " " + usr.LastName

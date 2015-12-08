@@ -5,6 +5,7 @@ package main
  */
 type Pharmacist struct {
 	Base
+	ID         int         `json:"id"`
 	Name       string      `json:"name"`
 	CRF        string      `json:"crf" gorm:"column:crf"`
 	Email      string      `json:"email"`

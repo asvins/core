@@ -74,6 +74,7 @@ func handleUserCreated(msg []byte) {
 	switch usr.Scope {
 	case "patient":
 		p := Patient{}
+		p.ID = usr.ID
 		p.Name = usr.FirstName + " " + usr.LastName
 		p.Email = usr.Email
 
@@ -83,6 +84,7 @@ func handleUserCreated(msg []byte) {
 
 	case "medic":
 		m := Medic{}
+		m.ID = usr.ID
 		m.Name = usr.FirstName + " " + usr.LastName
 		m.Email = usr.Email
 
@@ -92,6 +94,7 @@ func handleUserCreated(msg []byte) {
 
 	case "pharmaceutic":
 		p := Pharmacist{}
+		p.ID = usr.ID
 		p.Name = usr.FirstName + " " + usr.LastName
 		p.Email = usr.Email
 

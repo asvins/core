@@ -11,6 +11,7 @@ const (
  */
 type Patient struct {
 	Base
+	ID             int         `json:"id"`
 	Name           string      `json:"name"`
 	CPF            string      `json:"cpf" gorm:"column:cpf"`
 	MedicalHistory string      `json:"medical_history"`

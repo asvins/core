@@ -26,7 +26,6 @@ func DefRoutes() *router.Router {
 
 	//MEDIC
 	r.Handle("/api/medic/:medic_id/profile", router.GET, DiscoveryHandler, []router.Interceptor{})
-	r.Handle("/api/medic/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de farmaceutico //DONE
 
 	//TREATMENTS
 	r.Handle("/api/treatments/:id", router.GET, retreiveTreatments, []router.Interceptor{})
@@ -41,7 +40,7 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/receipt/:treatment_id", router.POST, uploadRecipe, []router.Interceptor{})
 
 	//PATIENT
-	r.Handle("/api/patient/:patient_id/feed", router.GET, DiscoveryHandler, []router.Interceptor{}) // TODO: VINIX
+	r.Handle("/api/patient/:patient_id/feed", router.GET, handleGetFeed, []router.Interceptor{})
 
 	//PHARMACIST
 	r.Handle("/api/medications", router.GET, retreiveMedication, []router.Interceptor{})
@@ -49,7 +48,6 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/medications/:id", router.DELETE, deleteMedication, []router.Interceptor{})
 	r.Handle("/api/medications", router.POST, insertMedication, []router.Interceptor{})
 
-	r.Handle("/api/patient/registration", router.POST, DiscoveryHandler, []router.Interceptor{}) // validar escopo de medico
 	// interceptors
 	r.AddBaseInterceptor("/", logger.NewLogger())
 	return r

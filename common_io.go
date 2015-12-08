@@ -41,6 +41,9 @@ func setupCommonIo() {
 	*	Topics
 	 */
 	consumer.HandleTopic("user_created", handleUserCreated)
+	consumer.HandleTopic("patient_updated", handlePatientUpdated)
+	consumer.HandleTopic("pack_created", handlePackCreated)
+	consumer.HandleTopic("subscription_updated", handleSubscriptionUpdated)
 
 	if err = consumer.StartListening(); err != nil {
 		log.Fatal(err)

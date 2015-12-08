@@ -12,7 +12,7 @@ import (
 
 type FeedEvent struct {
 	gorm.Model
-	PatientID   int    `json:"patient_id"`
+	PatientID   int    `json:"patient_id" gorm:"column:patient_id"`
 	Title       string `json:"title"`
 	Tags        string `json:"tags"`
 	Description string `json:"desc"`

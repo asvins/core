@@ -9,7 +9,7 @@ const (
 
 type Treatment struct {
 	Base
-	ID            int            `json:"email"`
+	ID            int            `json:"id"`
 	MedicId       int            `json:"medic_id"`
 	PatientId     int            `json:"patient_id"`
 	PharmacistId  int            `json:"pharmacist_id"`

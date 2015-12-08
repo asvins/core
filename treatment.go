@@ -48,5 +48,8 @@ func (t *Treatment) BuildPackHash() string {
 		hash += strconv.Itoa(prescription.MedicationId) + ","
 	}
 
-	return hash[:len(hash)-1]
+	if len(hash) != 0 {
+		return hash[:len(hash)-1]
+	}
+	return hash
 }

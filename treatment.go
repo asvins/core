@@ -1,23 +1,40 @@
 package main
 
-/*
-*	TODO
- */
+const (
+	TREATMENT_STATUS_APPROVED = iota
+	TREATMENT_STATUS_CANCELED
+	TREATMENT_STATUS_FINISHED
+	TREATMENT_STATUS_SUSPENDED
+)
+
 type Treatment struct {
+	Base
+	ID            int            `json:"email"`
+	MedicId       int            `json:"medic_id"`
+	PatientId     int            `json:"patient_id"`
+	PharmacistId  int            `json:"pharmacist_id"`
+	Title         string         `json:"title"`
+	Status        int            `json:"status"`
+	Dose          string         `json:"dose"`
+	Prescriptions []Prescription `json:"prescriptions"`
+	Receipts      []Receipt      `json:"receipts"`
 }
 
 func (t *Treatment) Save() error {
-	return nil
+	return db.Create(t).Error
 }
 
 func (t *Treatment) Update() error {
-	return nil
+	return db.Save(t).Error
 }
 
 func (t *Treatment) Delete() error {
-	return nil
+	return db.Delete(t).Error
 }
 
 func (t *Treatment) Retreive() ([]Treatment, error) {
-	return nil, nil
+	var ts []Treatment
+
+	err := db.Where(t).Find(&ts, t.Base.BuildQuery()).Error
+	return ts, err
 }

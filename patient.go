@@ -1,9 +1,9 @@
 package main
 
 const (
-	GenderMale = iota
-	GenderFemale
-	GenderOther
+	PATIENT_GENDER_MALE = iota
+	PATIENT_GENDER_FEMALE
+	PATIENT_GENDER_OTHER
 )
 
 /*
@@ -11,14 +11,13 @@ const (
  */
 type Patient struct {
 	Base
-	Name           string `json:"name"`
-	CPF            string `json:"cpf" gorm:"column:cpf"`
-	Label          int    `json:"label"`
-	MedicalHistory string `json:"medical_history"`
-	Gender         int    `json:"gender"`
-	Weight         string `json:"weight"`
-	Email          string `json:"email"`
-	Avatar         string `json:"avatar"`
+	Name           string      `json:"name"`
+	CPF            string      `json:"cpf" gorm:"column:cpf"`
+	MedicalHistory string      `json:"medical_history"`
+	Gender         int         `json:"gender"`
+	Weight         string      `json:"weight"`
+	Email          string      `json:"email"`
+	Treatments     []Treatment `json:"treatments"`
 }
 
 func (p *Patient) Save() error {

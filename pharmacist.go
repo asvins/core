@@ -1,31 +1,31 @@
 package main
 
-import "github.com/jinzhu/gorm"
-
+/*
+*	Pharmacist struct
+ */
 type Pharmacist struct {
-	gorm.Model
-	Name   string `json:"name" gorm:"column:name"`
-	CRF    string `json:"crf" gorm:"column:crf"`
-	Email  string `json:"email" gorm:"column:email"`
-	Avatar string `json:"avatar" gorm:"column:avatar"`
+	Base
+	Name       string      `json:"name"`
+	CRF        string      `json:"crf" gorm:"column:crf"`
+	Email      string      `json:"email"`
+	Treatments []Treatment `json:"treatments"`
 }
 
-func (m *Pharmacist) Create() error {
-	return db.Create(m).Error
+func (p *Pharmacist) Save() error {
+	return db.Create(p).Error
 }
 
-func (m *Pharmacist) Update() error {
-	return db.Save(m).Error
+func (p *Pharmacist) Update() error {
+	return db.Save(p).Error
 }
 
-func FindPharmacistByID(id string, m Pharmacist) error {
-	return db.Where("id = ?").First(&m).Error
+func (p *Pharmacist) Delete() error {
+	return db.Delete(p).Error
 }
 
-func ListPharmacists(ms []Pharmacist) error {
-	return db.Where("").Find(&ms).Error
-}
+func (p *Pharmacist) Retreive() ([]Pharmacist, error) {
+	var ps []Pharmacist
 
-func FindPharmacistByEmail(email string, m Patient) error {
-	return db.Where("email = ?", email).First(&m).Error
+	err := db.Where(p).Find(&ps, p.Base.BuildQuery()).Error
+	return ps, err
 }

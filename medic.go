@@ -2,14 +2,19 @@ package main
 
 import "github.com/jinzhu/gorm"
 
+// TODO
+const (
+	MEDIC_SPECIALTY_ = iota
+)
+
 type Medic struct {
 	gorm.Model
-	Name      string `json:"name" gorm:"column:name"`
-	CRM       string `json:"crm" gorm:"column:crm"`
-	CPF       string `json:"cpf" gorm:"column:cpf"`
-	Specialty string `json:"specialty" gorm:"column:specialty"`
-	Email     string `json:"email" gorm:"column:email"`
-	Avatar    string `json:"avatar" gorm:"column:avatar"`
+	Name       string `json:"name" gorm:"column:name"`
+	CRM        string `json:"crm" gorm:"column:crm"`
+	CPF        string `json:"cpf" gorm:"column:cpf"`
+	Specialty  string `json:"specialty" gorm:"column:specialty"`
+	Email      string `json:"email" gorm:"column:email"`
+	Treatments []Treatment
 }
 
 func (m *Medic) Create() error {

@@ -82,6 +82,8 @@ func insertTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.InternalServerError(err.Error())
 	}
 
+	sendTreatmentCreated(&t)
+
 	rend.JSON(w, http.StatusOK, t)
 	return nil
 }

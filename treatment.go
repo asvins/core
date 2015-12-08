@@ -1,5 +1,7 @@
 package main
 
+import "strconv"
+
 const (
 	TREATMENT_STATUS_ACTIVE = iota
 	TREATMENT_STATUS_INACTIVE
@@ -35,4 +37,16 @@ func (t *Treatment) Retreive() ([]Treatment, error) {
 
 	err := db.Where(t).Find(&ts, t.Base.BuildQuery()).Error
 	return ts, err
+}
+
+/*
+*	Gambetas
+ */
+func (t *Treatment) BuildPackHash() string {
+	hash := ""
+	for _, prescription := range t.Prescriptions {
+		hash += strconv.Itoa(prescription.MedicationId) + ","
+	}
+
+	return hash[:len(hash)-1]
 }

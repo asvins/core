@@ -2,11 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
-	"github.com/asvins/auth/models"
+	authModels "github.com/asvins/auth/models"
 	"github.com/asvins/common_io"
 	"github.com/asvins/utils/config"
+	"github.com/asvins/warehouse/models"
 )
 
 func setupCommonIo() {
@@ -24,44 +26,24 @@ func setupCommonIo() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer producer.TearDown()
 
 	/*
 	*	Consumer
 	 */
 	consumer = common_io.NewConsumer(cfg)
-	consumer.HandleTopic("user_created", userCreated)
+
+	/*
+	*	Topics
+	 */
+	consumer.HandleTopic("user_created", handleUserCreated)
 
 	if err = consumer.StartListening(); err != nil {
 		log.Fatal(err)
 	}
-
-	defer consumer.TearDown()
-
-}
-
-// HANDLERS
-
-func userCreated(msg []byte) {
-	var usr models.User
-	json.Unmarshal(msg, &usr)
-	switch usr.Scope {
-	case "patient":
-		p := Patient{Name: usr.FirstName + usr.LastName, Email: usr.Email}
-		p.Create()
-	case "medic":
-		m := Medic{Name: usr.FirstName + usr.LastName, Email: usr.Email}
-		m.Create()
-	case "pharmacist":
-		p := Pharmacist{Name: usr.FirstName + usr.LastName, Email: usr.Email}
-		p.Create()
-	default:
-		break
-	}
 }
 
 func userUpdated(msg []byte) {
-	var usr models.User
+	var usr authModels.User
 	json.Unmarshal(msg, &usr)
 	// update user: COMO PEGAR OS EMAILS ANTIGOS??
 	switch usr.Scope {
@@ -70,9 +52,74 @@ func userUpdated(msg []byte) {
 	case "pharmacist":
 	default:
 		break
+	}
+}
+
+/*
+*	Handlers
+ */
+func handleUserCreated(msg []byte) {
+	var usr authModels.User
+	err := json.Unmarshal(msg, &usr)
+
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+	}
+
+	switch usr.Scope {
+	case "patient":
+		p := Patient{}
+		p.Name = usr.FirstName + " " + usr.LastName
+		p.Email = usr.Email
+
+		err = p.Save()
+
+		return
+
+	case "medic":
+		m := Medic{}
+		m.Name = usr.FirstName + " " + usr.LastName
+		m.Email = usr.Email
+
+		err = m.Create()
+
+		return
+
+	case "pharmaceutic":
+		p := Pharmaceutic{}
+		p.Name = usr.FirstName + " " + usr.LastName
+		p.Email = usr.Email
+
+		err = p.Save()
+		return
+	}
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+	}
 
 }
 
 /*
-*	Here can be added the handlers for kafka topics
+*	Senders
  */
+func sendProductCreated(m *Medication) {
+	topic, _ := common_io.BuildTopicFromCommonEvent(common_io.EVENT_CREATED, "product")
+	p := models.Product{}
+
+	/*
+	*	Bind
+	 */
+	p.ID = m.ID
+	p.Name = m.Name
+
+	/*
+	*	json Marshal
+	 */
+	b, err := json.Marshal(&p)
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		return
+	}
+
+	producer.Publish(topic, b)
+}

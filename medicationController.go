@@ -52,6 +52,8 @@ func insertMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.InternalServerError(err.Error())
 	}
 
+	sendProductCreated(m)
+
 	rend.JSON(w, http.StatusOK, m)
 	return nil
 }

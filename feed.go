@@ -39,7 +39,7 @@ func (e *FeedEvent) Delete() error {
 
 // LOGIC
 func NewEvent(i interface{}) *FeedEvent {
-	var e *FeedEvent
+	e := &FeedEvent{}
 	switch reflect.TypeOf(i).Name() {
 	case "Subscription":
 		s, _ := i.(sm.Subscription)

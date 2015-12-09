@@ -1,7 +1,7 @@
 package main
 
 import (
-	"crypto/md5"
+	"crypto/sha1"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -145,11 +145,8 @@ func sendTreatmentCreated(t *Treatment) {
 	p.Owner = strconv.Itoa(t.PatientId)
 	p.Supervisor = strconv.Itoa(t.PharmacistId)
 	p.PackType = "medication"
-
-	rand.Seed(time.Now().UTC().UnixNano())
-	tc := md5.Sum([]byte(strconv.Itoa(rand.Intn(10000))))
-	p.TrackingCode = string(tc[:])
-	p.Status = operationsModel.PackStatusScheduled
+	p.TrackingCode = generateTrackingCode()
+	p.Status = operationsModel.PackStatusWaitingPayment
 	p.PackHash = t.BuildPackHash()
 
 	/*
@@ -162,4 +159,16 @@ func sendTreatmentCreated(t *Treatment) {
 	}
 
 	producer.Publish(topic, b)
+}
+
+/*
+*	Helper
+ */
+
+func generateTrackingCode() string {
+	rand.Seed(time.Now().UTC().UnixNano())
+	h := sha1.New()
+	tc := strconv.Itoa(rand.Intn(10000))
+	h.Write([]byte(tc))
+	return string(h.Sum(nil))
 }

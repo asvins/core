@@ -1,6 +1,6 @@
 ; common_io config file
 [modulename]
-value = core
+value = core_module
 
 [kafka]
 brokerlist = kafka:9092

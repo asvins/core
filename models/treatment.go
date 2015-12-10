@@ -20,6 +20,8 @@ type Treatment struct {
 	Title         string         `json:"title"`
 	Status        int            `json:"status"`
 	Dose          string         `json:"dose"`
+	StartDate     int            `json:"start_date"`
+	FinishDate    int            `json:"finish_date"`
 	Prescriptions []Prescription `json:"prescriptions"`
 	Receipts      []Receipt      `json:"receipts"`
 }

@@ -17,7 +17,7 @@ type Prescription struct {
 	MedicationId int `json:"medication_id"`
 	StartingAt   int `json:"starting_at"`
 	FinishingAt  int `json:"finishing_at"`
-	Frquency     int `json:"frequency"`
+	Frequency    int `json:"frequency"`
 }
 
 func (p *Prescription) Save(db *gorm.DB) error {

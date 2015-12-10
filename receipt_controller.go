@@ -7,21 +7,16 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/asvins/core/models"
 	"github.com/asvins/router/errors"
 )
 
-const (
-	ReceiptStatusUndecided = iota
-	ReceiptStatusValid
-	ReceiptStatusInvalid
-)
-
 func validateRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
-	rcpt := FetchReceipt(r.URL.Query().Get("treatment_id"))
+	rcpt := models.FetchReceipt(r.URL.Query().Get("treatment_id"), db)
 	if r.ParseForm() != nil {
 		return errors.BadRequest("Invalid input")
 	}
-	if rcpt.UpdateStatus(recipeStringToStatus(r.Form.Get("status"))) != nil {
+	if rcpt.UpdateStatus(models.RecipeStringToStatus(r.Form.Get("status")), db) != nil {
 		return errors.NotFound("Not found")
 	}
 	rend.JSON(w, 200, "{}")
@@ -32,7 +27,7 @@ func fetchRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 	treatmentId := r.URL.Query().Get("treatment_id")
 	rId := r.URL.Query().Get("receipt_id")
 	if rId == "" { //FETCH ALL: discovery
-		rs := ListReceipts(treatmentId)
+		rs := models.ListReceipts(treatmentId, db)
 		rend.JSON(w, 200, rs)
 		return nil
 	}
@@ -51,10 +46,10 @@ func uploadRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 	defer file.Close()
 
 	id, _ := strconv.Atoi(treatmentId)
-	rcpt := &Receipt{TreatmentID: id, FilePath: "", Status: ReceiptStatusUndecided}
-	rcpt.Create()
+	rcpt := &models.Receipt{TreatmentID: id, FilePath: "", Status: models.ReceiptStatusUndecided}
+	rcpt.Create(db)
 	rcpt.FilePath = "upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID))
-	rcpt.Save() // ID incremental :'(
+	rcpt.Save(db) // ID incremental :'(
 	os.MkdirAll("upload/"+treatmentId, 0777)
 	out, err := os.Create("upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID)))
 	fmt.Println(err)

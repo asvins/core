@@ -1,6 +1,10 @@
-package main
+package models
 
-import "strconv"
+import (
+	"strconv"
+
+	"github.com/jinzhu/gorm"
+)
 
 // Medication possible labels
 const (
@@ -99,19 +103,19 @@ func (m *Medication) String() string {
 	return "ID: " + strconv.Itoa(m.ID) + " Name: " + m.Name + " ActiveAgent: " + m.ActiveAgent
 }
 
-func (m *Medication) Save() error {
+func (m *Medication) Save(db *gorm.DB) error {
 	return db.Create(m).Error
 }
 
-func (m *Medication) Update() error {
+func (m *Medication) Update(db *gorm.DB) error {
 	return db.Save(m).Error
 }
 
-func (m *Medication) Delete() error {
+func (m *Medication) Delete(db *gorm.DB) error {
 	return db.Delete(m).Error
 }
 
-func (m *Medication) Retreive() ([]Medication, error) {
+func (m *Medication) Retrieve(db *gorm.DB) ([]Medication, error) {
 	var medications []Medication
 
 	err := db.Where(m).Find(&medications, m.Base.BuildQuery()).Error

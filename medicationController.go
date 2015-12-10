@@ -1,15 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
 
+	"github.com/asvins/core/models"
 	"github.com/asvins/router/errors"
 )
 
-func FillMedicationIdWIthUrlValue(m *Medication, params url.Values) error {
+func FillMedicationIdWIthUrlValue(m *models.Medication, params url.Values) error {
 	id, err := strconv.Atoi(params.Get("id"))
 	if err != nil {
 		return err
@@ -20,14 +20,14 @@ func FillMedicationIdWIthUrlValue(m *Medication, params url.Values) error {
 }
 
 func retreiveMedication(w http.ResponseWriter, r *http.Request) errors.Http {
-	m := Medication{}
+	m := models.Medication{}
 	if err := BuildStructFromQueryString(&m, r.URL.Query()); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
 	m.Base.Query = r.URL.Query()
 
-	medications, err := m.Retreive()
+	medications, err := m.Retrieve(db)
 	if err != nil {
 		return errors.BadRequest(err.Error())
 	}
@@ -41,14 +41,14 @@ func retreiveMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func insertMedication(w http.ResponseWriter, r *http.Request) errors.Http {
-	im := IntermediateMedication{}
+	im := models.IntermediateMedication{}
 	if err := BuildStructFromReqBody(&im, r.Body); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
 	m := im.Medication()
 
-	if err := m.Save(); err != nil {
+	if err := m.Save(db); err != nil {
 		return errors.InternalServerError(err.Error())
 	}
 
@@ -59,7 +59,7 @@ func insertMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func updateMedication(w http.ResponseWriter, r *http.Request) errors.Http {
-	im := IntermediateMedication{}
+	im := models.IntermediateMedication{}
 
 	if err := BuildStructFromReqBody(&im, r.Body); err != nil {
 		return errors.BadRequest(err.Error())
@@ -71,9 +71,7 @@ func updateMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.BadRequest(err.Error())
 	}
 
-	fmt.Printf("%v\n", m)
-
-	if err := m.Update(); err != nil {
+	if err := m.Update(db); err != nil {
 		return errors.InternalServerError(err.Error())
 	}
 
@@ -82,12 +80,12 @@ func updateMedication(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func deleteMedication(w http.ResponseWriter, r *http.Request) errors.Http {
-	m := Medication{}
+	m := models.Medication{}
 	if err := FillMedicationIdWIthUrlValue(&m, r.URL.Query()); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
-	if err := m.Delete(); err != nil {
+	if err := m.Delete(db); err != nil {
 		return errors.InternalServerError(err.Error())
 	}
 

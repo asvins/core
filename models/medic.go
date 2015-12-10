@@ -1,4 +1,4 @@
-package main
+package models
 
 import "github.com/jinzhu/gorm"
 
@@ -18,22 +18,22 @@ type Medic struct {
 	Treatments []Treatment
 }
 
-func (m *Medic) Create() error {
+func (m *Medic) Create(db *gorm.DB) error {
 	return db.Create(m).Error
 }
 
-func (m *Medic) Update() error {
+func (m *Medic) Update(db *gorm.DB) error {
 	return db.Save(m).Error
 }
 
-func FindMedicByID(id string, m Medic) error {
+func FindMedicByID(id string, m Medic, db *gorm.DB) error {
 	return db.Where("id = ?").First(&m).Error
 }
 
-func ListMedics(ms []Medic) error {
+func ListMedics(ms []Medic, db *gorm.DB) error {
 	return db.Where("").Find(&ms).Error
 }
 
-func FindMedicByEmail(email string, m Patient) error {
+func FindMedicByEmail(email string, m Patient, db *gorm.DB) error {
 	return db.Where("email = ?", email).First(&m).Error
 }

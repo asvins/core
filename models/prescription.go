@@ -1,4 +1,6 @@
-package main
+package models
+
+import "github.com/jinzhu/gorm"
 
 const (
 	PRESCRIPTION_FREQ_4H = iota
@@ -18,19 +20,19 @@ type Prescription struct {
 	Frquency     int `json:"frequency"`
 }
 
-func (p *Prescription) Save() error {
+func (p *Prescription) Save(db *gorm.DB) error {
 	return db.Create(p).Error
 }
 
-func (p *Prescription) Update() error {
+func (p *Prescription) Update(db *gorm.DB) error {
 	return db.Save(p).Error
 }
 
-func (p *Prescription) Delete() error {
+func (p *Prescription) Delete(db *gorm.DB) error {
 	return db.Delete(p).Error
 }
 
-func (p *Prescription) Retreive() ([]Prescription, error) {
+func (p *Prescription) Retreive(db *gorm.DB) ([]Prescription, error) {
 	var ps []Prescription
 
 	err := db.Where(p).Find(&ps, p.Base.BuildQuery()).Error

@@ -12,9 +12,9 @@ import (
 
 	authModels "github.com/asvins/auth/models"
 	"github.com/asvins/common_io"
-	operationsModel "github.com/asvins/operations/models"
+	"github.com/asvins/core/models"
 	"github.com/asvins/utils/config"
-	"github.com/asvins/warehouse/models"
+	warehouseModels "github.com/asvins/warehouse/models"
 )
 
 func setupCommonIo() {
@@ -77,32 +77,32 @@ func handleUserCreated(msg []byte) {
 
 	switch usr.Scope {
 	case "patient":
-		p := Patient{}
+		p := models.Patient{}
 		p.ID = usr.ID
 		p.Name = usr.FirstName + " " + usr.LastName
 		p.Email = usr.Email
 
-		err = p.Save()
+		err = p.Save(db)
 
 		return
 
 	case "medic":
-		m := Medic{}
+		m := models.Medic{}
 		m.ID = usr.ID
 		m.Name = usr.FirstName + " " + usr.LastName
 		m.Email = usr.Email
 
-		err = m.Create()
+		err = m.Create(db)
 
 		return
 
 	case "pharmacist":
-		p := Pharmacist{}
+		p := models.Pharmacist{}
 		p.ID = usr.ID
 		p.Name = usr.FirstName + " " + usr.LastName
 		p.Email = usr.Email
 
-		err = p.Save()
+		err = p.Save(db)
 		return
 	}
 	if err != nil {
@@ -114,9 +114,9 @@ func handleUserCreated(msg []byte) {
 /*
 *	Senders
  */
-func sendProductCreated(m *Medication) {
+func sendProductCreated(m *models.Medication) {
 	topic, _ := common_io.BuildTopicFromCommonEvent(common_io.EVENT_CREATED, "product")
-	p := models.Product{}
+	p := warehouseModels.Product{}
 
 	/*
 	*	Bind
@@ -136,24 +136,13 @@ func sendProductCreated(m *Medication) {
 	producer.Publish(topic, b)
 }
 
-func sendTreatmentCreated(t *Treatment) {
+func sendTreatmentCreated(t *models.Treatment) {
 	topic, _ := common_io.BuildTopicFromCommonEvent(common_io.EVENT_CREATED, "treatment")
-	p := operationsModel.Pack{}
-
-	/*
-	* Bind
-	 */
-	p.Owner = strconv.Itoa(t.PatientId)
-	p.Supervisor = strconv.Itoa(t.PharmacistId)
-	p.PackType = "medication"
-	p.TrackingCode = generateTrackingCode()
-	p.Status = operationsModel.PackStatusWaitingPayment
-	p.PackHash = t.BuildPackHash()
 
 	/*
 	*	marshal
 	 */
-	b, err := json.Marshal(&p)
+	b, err := json.Marshal(&t)
 	if err != nil {
 		fmt.Println("[ERROR] ", err.Error())
 		return

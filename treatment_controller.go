@@ -5,10 +5,11 @@ import (
 	"net/url"
 	"strconv"
 
+	"github.com/asvins/core/models"
 	"github.com/asvins/router/errors"
 )
 
-func FillTreatmentIdWIthUrlValue(t *Treatment, params url.Values) error {
+func FillTreatmentIdWIthUrlValue(t *models.Treatment, params url.Values) error {
 	id, err := strconv.Atoi(params.Get("id"))
 	if err != nil {
 		return err
@@ -19,14 +20,14 @@ func FillTreatmentIdWIthUrlValue(t *Treatment, params url.Values) error {
 }
 
 func retreiveTreatments(w http.ResponseWriter, r *http.Request) errors.Http {
-	t := Treatment{}
+	t := models.Treatment{}
 	if err := BuildStructFromQueryString(&t, r.URL.Query()); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
 	t.Base.Query = r.URL.Query()
 
-	treatments, err := t.Retreive()
+	treatments, err := t.Retrieve(db)
 	if err != nil {
 		return errors.BadRequest(err.Error())
 	}
@@ -40,12 +41,12 @@ func retreiveTreatments(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func deleteTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
-	t := Treatment{}
+	t := models.Treatment{}
 	if err := FillTreatmentIdWIthUrlValue(&t, r.URL.Query()); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
-	if err := t.Delete(); err != nil {
+	if err := t.Delete(db); err != nil {
 		return errors.InternalServerError(err.Error())
 	}
 
@@ -54,7 +55,7 @@ func deleteTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func updateTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
-	t := Treatment{}
+	t := models.Treatment{}
 
 	if err := BuildStructFromReqBody(&t, r.Body); err != nil {
 		return errors.BadRequest(err.Error())
@@ -64,7 +65,7 @@ func updateTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.BadRequest(err.Error())
 	}
 
-	if err := t.Update(); err != nil {
+	if err := t.Update(db); err != nil {
 		return errors.InternalServerError(err.Error())
 	}
 
@@ -73,12 +74,12 @@ func updateTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func insertTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
-	t := Treatment{}
+	t := models.Treatment{}
 	if err := BuildStructFromReqBody(&t, r.Body); err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
-	if err := t.Save(); err != nil {
+	if err := t.Save(db); err != nil {
 		return errors.InternalServerError(err.Error())
 	}
 

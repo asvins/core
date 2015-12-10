@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/asvins/core/models"
 	om "github.com/asvins/operations/models"
 	"github.com/asvins/router/errors"
 	sm "github.com/asvins/subscription/models"
@@ -20,7 +21,7 @@ func handleGetFeed(w http.ResponseWriter, req *http.Request) errors.Http {
 		return errors.BadRequest("Invalid patient id")
 	}
 
-	es, err := FindFeedEvents(from, patientID)
+	es, err := models.FindFeedEvents(from, patientID, db)
 	if err != nil {
 		return errors.NotFound("No events")
 	}
@@ -29,7 +30,7 @@ func handleGetFeed(w http.ResponseWriter, req *http.Request) errors.Http {
 }
 
 func handlePatientUpdated(msg []byte) {
-	var p Patient
+	var p models.Patient
 	err := json.Unmarshal(msg, &p)
 
 	if err != nil {
@@ -62,6 +63,6 @@ func handleSubscriptionUpdated(msg []byte) {
 }
 
 func createFeedEvent(i interface{}) {
-	e := NewEvent(i)
-	e.Create()
+	e := models.NewEvent(i)
+	e.Create(db)
 }

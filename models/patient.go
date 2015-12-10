@@ -1,4 +1,6 @@
-package main
+package models
+
+import "github.com/jinzhu/gorm"
 
 const (
 	PATIENT_GENDER_MALE = iota
@@ -21,23 +23,19 @@ type Patient struct {
 	Treatments     []Treatment `json:"treatments"`
 }
 
-func (p *Patient) Save() error {
+func (p *Patient) Save(db *gorm.DB) error {
 	return db.Create(p).Error
 }
 
-func (p *Patient) Update() error {
+func (p *Patient) Update(db *gorm.DB) error {
 	return db.Save(p).Error
 }
 
-func (p *Patient) Delete() error {
+func (p *Patient) Delete(db *gorm.DB) error {
 	return db.Delete(p).Error
 }
 
-func FindPatientByID(id string, m Patient) error {
-	return db.Where("id = ?").First(&m).Error
-}
-
-func (p *Patient) Retreive() ([]Patient, error) {
+func (p *Patient) Retreive(db *gorm.DB) ([]Patient, error) {
 	var ps []Patient
 
 	err := db.Where(p).Find(&ps, p.Base.BuildQuery()).Error

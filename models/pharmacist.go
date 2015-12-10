@@ -1,4 +1,6 @@
-package main
+package models
+
+import "github.com/jinzhu/gorm"
 
 /*
 *	Pharmacist struct
@@ -12,19 +14,19 @@ type Pharmacist struct {
 	Treatments []Treatment `json:"treatments"`
 }
 
-func (p *Pharmacist) Save() error {
+func (p *Pharmacist) Save(db *gorm.DB) error {
 	return db.Create(p).Error
 }
 
-func (p *Pharmacist) Update() error {
+func (p *Pharmacist) Update(db *gorm.DB) error {
 	return db.Save(p).Error
 }
 
-func (p *Pharmacist) Delete() error {
+func (p *Pharmacist) Delete(db *gorm.DB) error {
 	return db.Delete(p).Error
 }
 
-func (p *Pharmacist) Retreive() ([]Pharmacist, error) {
+func (p *Pharmacist) Retreive(db *gorm.DB) ([]Pharmacist, error) {
 	var ps []Pharmacist
 
 	err := db.Where(p).Find(&ps, p.Base.BuildQuery()).Error

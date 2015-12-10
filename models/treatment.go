@@ -1,6 +1,10 @@
-package main
+package models
 
-import "strconv"
+import (
+	"strconv"
+
+	"github.com/jinzhu/gorm"
+)
 
 const (
 	TREATMENT_STATUS_ACTIVE = iota
@@ -20,19 +24,19 @@ type Treatment struct {
 	Receipts      []Receipt      `json:"receipts"`
 }
 
-func (t *Treatment) Save() error {
+func (t *Treatment) Save(db *gorm.DB) error {
 	return db.Create(t).Error
 }
 
-func (t *Treatment) Update() error {
+func (t *Treatment) Update(db *gorm.DB) error {
 	return db.Save(t).Error
 }
 
-func (t *Treatment) Delete() error {
+func (t *Treatment) Delete(db *gorm.DB) error {
 	return db.Delete(t).Error
 }
 
-func (t *Treatment) Retreive() ([]Treatment, error) {
+func (t *Treatment) Retrieve(db *gorm.DB) ([]Treatment, error) {
 	var ts []Treatment
 
 	err := db.Where(t).Find(&ts, t.Base.BuildQuery()).Error

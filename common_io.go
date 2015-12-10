@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha1"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -170,5 +171,5 @@ func generateTrackingCode() string {
 	h := sha1.New()
 	tc := strconv.Itoa(rand.Intn(10000))
 	h.Write([]byte(tc))
-	return string(h.Sum(nil))
+	return hex.EncodeToString(h.Sum(nil))
 }

@@ -26,7 +26,7 @@ func (p *Pharmacist) Delete(db *gorm.DB) error {
 	return db.Delete(p).Error
 }
 
-func (p *Pharmacist) Retreive(db *gorm.DB) ([]Pharmacist, error) {
+func (p *Pharmacist) Retrieve(db *gorm.DB) ([]Pharmacist, error) {
 	var ps []Pharmacist
 
 	err := db.Where(p).Find(&ps, p.Base.BuildQuery()).Error

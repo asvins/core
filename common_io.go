@@ -163,7 +163,7 @@ func sendTreatmentCreated(t *models.Treatment) {
 
 	patient := models.Patient{}
 	patient.ID = t.PatientId
-	ps, err := patient.Retreive(db)
+	ps, err := patient.Retrieve(db)
 	if err != nil {
 		fmt.Println("[ERROR] ", err.Error())
 		return

@@ -26,6 +26,8 @@ func DefRoutes() *router.Router {
 
 	//MEDIC
 	r.Handle("/api/medic/:medic_id/profile", router.GET, DiscoveryHandler, []router.Interceptor{})
+	r.Handle("/api/medic/:id", router.PUT, handleMedicUpdate, []router.Interceptor{})
+	r.Handle("/api/medic", router.GET, handleMedicRetrieve, []router.Interceptor{})
 
 	//TREATMENTS
 	r.Handle("/api/treatments", router.GET, retreiveTreatments, []router.Interceptor{})
@@ -41,8 +43,14 @@ func DefRoutes() *router.Router {
 
 	//PATIENT
 	r.Handle("/api/patient/:patient_id/feed", router.GET, handleGetFeed, []router.Interceptor{})
+	r.Handle("/api/patient/:id", router.PUT, handlePatientUpdate, []router.Interceptor{})
+	r.Handle("/api/patient", router.GET, handlePatientRetrieve, []router.Interceptor{})
 
 	//PHARMACIST
+	r.Handle("/api/pharmacist/:id", router.GET, handlePharmacistUpdate, []router.Interceptor{})
+	r.Handle("/api/pharmacist", router.GET, handlePharmacistRetrieve, []router.Interceptor{})
+
+	//MEDICATIONS
 	r.Handle("/api/medications", router.GET, retreiveMedication, []router.Interceptor{})
 	r.Handle("/api/medications/:id", router.PUT, updateMedication, []router.Interceptor{})
 	r.Handle("/api/medications/:id", router.DELETE, deleteMedication, []router.Interceptor{})

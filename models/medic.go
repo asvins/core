@@ -8,6 +8,7 @@ const (
 )
 
 type Medic struct {
+	Base
 	gorm.Model
 	ID         int    `json:"id"`
 	Name       string `json:"name" gorm:"column:name"`
@@ -36,4 +37,11 @@ func ListMedics(ms []Medic, db *gorm.DB) error {
 
 func FindMedicByEmail(email string, m Patient, db *gorm.DB) error {
 	return db.Where("email = ?", email).First(&m).Error
+}
+
+func (m *Medic) Retrieve(db *gorm.DB) ([]Medic, error) {
+	var ms []Medic
+
+	err := db.Where(m).Find(&ms, m.Base.BuildQuery()).Error
+	return ms, err
 }

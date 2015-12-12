@@ -23,6 +23,7 @@ type Treatment struct {
 	Dose          string         `json:"dose"`
 	StartDate     int            `json:"start_date"`
 	FinishDate    int            `json:"finish_date"`
+	Email         string         `json:"email" sql:"-"`
 	Prescriptions []Prescription `json:"prescriptions"`
 	Receipts      []Receipt      `json:"receipts"`
 }

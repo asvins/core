@@ -160,6 +160,22 @@ func sendTreatmentCreated(t *models.Treatment) {
 	/*
 	*	marshal
 	 */
+
+	patient := models.Patient{}
+	patient.ID = t.PatientId
+	ps, err := patient.Retreive(db)
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		return
+	}
+
+	if len(ps) != 1 {
+		fmt.Println("[FATAL] More then one patient with the same ID...")
+		return
+	}
+
+	t.Email = ps[0].Email
+
 	b, err := json.Marshal(&t)
 	if err != nil {
 		fmt.Println("[ERROR] ", err.Error())

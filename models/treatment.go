@@ -9,6 +9,7 @@ import (
 const (
 	TREATMENT_STATUS_ACTIVE = iota
 	TREATMENT_STATUS_INACTIVE
+	TREATMENT_STATUS_FINISHED
 )
 
 type Treatment struct {

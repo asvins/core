@@ -28,7 +28,7 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/medic/:medic_id/profile", router.GET, DiscoveryHandler, []router.Interceptor{})
 
 	//TREATMENTS
-	r.Handle("/api/treatments/:id", router.GET, retreiveTreatments, []router.Interceptor{})
+	r.Handle("/api/treatments", router.GET, retreiveTreatments, []router.Interceptor{})
 	r.Handle("/api/treatments/:id", router.PUT, updateTreatment, []router.Interceptor{})
 	r.Handle("/api/treatments/:id", router.DELETE, deleteTreatment, []router.Interceptor{})
 	r.Handle("/api/treatments", router.POST, insertTreatment, []router.Interceptor{})

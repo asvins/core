@@ -45,6 +45,7 @@ func setupCommonIo() {
 	consumer.HandleTopic("patient_updated", handlePatientUpdated)
 	consumer.HandleTopic("pack_created", handlePackCreated)
 	consumer.HandleTopic("subscription_updated", handleSubscriptionUpdated)
+	consumer.HandleTopic("activate_treatments", handleActivateTreatments)
 
 	if err = consumer.StartListening(); err != nil {
 		log.Fatal(err)
@@ -109,6 +110,23 @@ func handleUserCreated(msg []byte) {
 		fmt.Println("[ERROR] ", err.Error())
 	}
 
+}
+
+func handleActivateTreatments(msg []byte) {
+	ts := []models.Treatment{}
+	err := json.Unmarshal(msg, &ts)
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		return
+	}
+
+	for _, t := range ts {
+		t.Status = models.TREATMENT_STATUS_ACTIVE
+		if err := t.Save(db); err != nil {
+			fmt.Println("[ERROR] ", err.Error())
+			return
+		}
+	}
 }
 
 /*

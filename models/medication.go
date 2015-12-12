@@ -33,6 +33,7 @@ type IntermediateMedication struct {
 	BrRegister      string `json:"br_register"`
 	TerapeuticClass string `json:"terapeutic_class"`
 	Manufacturer    string `json:"manufacturer"`
+	ReceiptOk       int    `json:"receipt_ok"`
 }
 
 func (im *IntermediateMedication) LabelEnum() int {
@@ -81,6 +82,7 @@ func (im *IntermediateMedication) Medication() *Medication {
 		BrRegister:      im.BrRegister,
 		TerapeuticClass: im.TerapeuticClass,
 		Manufacturer:    im.Manufacturer,
+		ReceiptOk:       im.ReceiptOk,
 	}
 }
 
@@ -97,6 +99,7 @@ type Medication struct {
 	BrRegister      string `json:"br_register"`
 	TerapeuticClass string `json:"terapeutic_class"`
 	Manufacturer    string `json:"manufacturer"`
+	ReceiptOk       int    `json:"receipt_ok"`
 }
 
 func (m *Medication) String() string {

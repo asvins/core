@@ -40,15 +40,15 @@ func handlePatientUpdated(msg []byte) {
 	createFeedEvent(p)
 }
 
-func handlePackCreated(msg []byte) {
-	var p om.Pack
-	err := json.Unmarshal(msg, &p)
+func handleBoxCreated(msg []byte) {
+	var b om.Box
+	err := json.Unmarshal(msg, &b)
 
 	if err != nil {
 		fmt.Println("[ERROR] ", err.Error())
 	}
 
-	createFeedEvent(p)
+	createFeedEvent(b)
 }
 
 func handleSubscriptionUpdated(msg []byte) {

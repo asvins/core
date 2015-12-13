@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	//om "github.com/asvins/operations/models"
+	om "github.com/asvins/operations/models"
 	sm "github.com/asvins/subscription/models"
 	"github.com/jinzhu/gorm"
 )
@@ -53,28 +53,23 @@ func NewEvent(i interface{}) *FeedEvent {
 		e.Description = "Os dados de sua conta foram atualizados com sucesso!"
 		e.Tags = "profile"
 		e.PatientID = p.ID
-	case "Pack":
-	//	p, _ := i.(om.Pack)
-	//	switch p.Status {
-	//	case om.PackStatusDelivered:
-	//		e.Title = "Pedido Entregue"
-	//		e.Description = "Seu pedido de " + p.To.String() + " até " + p.From.String() + " já está saiu para a entrega!"
-	//	case om.PackStatusShipped:
-	//		e.Title = "Pedido Enviado"
-	//		e.Description = "Seu pedido de " + p.To.String() + " até " + p.From.String() + " já foi enviado pela transportadora!"
-	//	case om.PackStatusScheduled:
-	//		e.Title = "Pedido Agendado"
-	//		e.Description = "Seu pedido de " + p.To.String() + " até " + p.From.String() + " já foi agendado."
-	//	case om.PackStatusOnProduction:
-	//		e.Title = "Pedido em Produção"
-	//		e.Description = "Seu pedido de " + p.To.String() + " até " + p.From.String() + " já está sendo produzido."
-	//	}
-	//	e.Title = "Atualizações do Envio"
-	//	e.Tags = "shipment"
-	//	e.PatientID, _ = strconv.Atoi(p.Owner)
-	//	if p.TrackingCode != "" {
-	//		e.Description += "Código de rastreio: " + p.TrackingCode
-	//	}
+	case "Box":
+		box, _ := i.(om.Box)
+		switch box.Status {
+		case om.BOX_DELIVERED:
+			e.Title = "Pedido Entregue"
+			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já está saiu para a entrega!"
+		case om.BOX_SHIPED:
+			e.Title = "Pedido Enviado"
+			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já foi enviado pela transportadora!"
+		case om.BOX_SCHEDULED:
+			e.Title = "Pedido Agendado"
+			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já foi agendado."
+
+		}
+		e.Title = "Atualizações do Envio"
+		e.Tags = "shipment"
+		e.PatientID = box.PatientId
 	default:
 		return nil
 	}

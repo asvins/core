@@ -43,7 +43,7 @@ func setupCommonIo() {
 	 */
 	consumer.HandleTopic("user_created", handleUserCreated)
 	consumer.HandleTopic("patient_updated", handlePatientUpdated)
-	consumer.HandleTopic("pack_created", handlePackCreated)
+	consumer.HandleTopic("box_created", handleBoxCreated)
 	consumer.HandleTopic("subscription_updated", handleSubscriptionUpdated)
 	consumer.HandleTopic("activate_treatments", handleActivateTreatments)
 

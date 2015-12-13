@@ -55,6 +55,8 @@ func handlePatientUpdate(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.InternalServerError(err.Error())
 	}
 
+	sendPatientUpdated(&p)
+
 	rend.JSON(w, http.StatusOK, p)
 	return nil
 }

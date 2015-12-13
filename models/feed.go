@@ -47,29 +47,41 @@ func NewEvent(i interface{}) *FeedEvent {
 		e.Description = "Seus dados de pagamento foram atualizados. Isso pode significar que um pagamento foi realizado, ou que um endereço de entrega foi modificado."
 		e.Tags = "subscription"
 		e.PatientID, _ = strconv.Atoi(s.Owner)
+		break
+
 	case "Patient":
 		p, _ := i.(Patient)
 		e.Title = "Dados Atualizados"
 		e.Description = "Os dados de sua conta foram atualizados com sucesso!"
 		e.Tags = "profile"
 		e.PatientID = p.ID
+		break
+
 	case "Box":
 		box, _ := i.(om.Box)
 		switch box.Status {
 		case om.BOX_DELIVERED:
 			e.Title = "Pedido Entregue"
 			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já está saiu para a entrega!"
+			break
+
 		case om.BOX_SHIPED:
 			e.Title = "Pedido Enviado"
 			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já foi enviado pela transportadora!"
+			break
+
 		case om.BOX_SCHEDULED:
 			e.Title = "Pedido Agendado"
 			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já foi agendado."
-
+			break
 		}
 		e.Title = "Atualizações do Envio"
 		e.Tags = "shipment"
 		e.PatientID = box.PatientId
+		break
+
+	case "Subscriber":
+		break
 	default:
 		return nil
 	}

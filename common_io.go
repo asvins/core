@@ -185,6 +185,17 @@ func sendTreatmentCreated(t *models.Treatment) {
 	producer.Publish(topic, b)
 }
 
+func sendPatientUpdated(p *models.Patient) {
+	b, err := json.Marshal(p)
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		return
+	}
+
+	producer.Publish("patient_updated", b)
+
+}
+
 /*
 *	Helper
  */

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/jinzhu/gorm"
@@ -43,8 +44,29 @@ func (t *Treatment) Delete(db *gorm.DB) error {
 func (t *Treatment) Retrieve(db *gorm.DB) ([]Treatment, error) {
 	var ts []Treatment
 
-	err := db.Where(t).Find(&ts, t.Base.BuildQuery()).Error
-	return ts, err
+	if err := db.Where(t).Find(&ts, t.Base.BuildQuery()).Error; err != nil {
+		return nil, err
+	}
+
+	for i, o := range ts {
+		prescriptions := []Prescription{}
+		receipts := []Receipt{}
+
+		if err := db.Model(o).Related(&prescriptions, "Prescriptions").Error; err != nil {
+			fmt.Println("[ERROR] ", err.Error())
+			return nil, err
+		}
+		if err := db.Model(o).Related(&receipts, "Receipts").Error; err != nil {
+			fmt.Println("[ERROR] ", err.Error())
+			return nil, err
+		}
+
+		o.Prescriptions = prescriptions
+		o.Receipts = receipts
+		ts[i] = o
+	}
+
+	return ts, nil
 }
 
 /*

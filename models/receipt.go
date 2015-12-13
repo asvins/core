@@ -10,9 +10,9 @@ const (
 
 type Receipt struct {
 	gorm.Model
-	TreatmentID int    `json:"treatment_id" gorm:"column:treatment_id"`
-	FilePath    string `json:"file_path" gorm:"column:file_path"`
-	Status      int    `json:"status" gorm:"column:status"`
+	PrescriptionId int    `json:"prescription_id"`
+	FilePath       string `json:"file_path" gorm:"column:file_path"`
+	Status         int    `json:"status" gorm:"column:status"`
 }
 
 func (r *Receipt) Create(db *gorm.DB) error {
@@ -28,15 +28,15 @@ func (r *Receipt) UpdateStatus(status int, db *gorm.DB) error {
 	return r.Save(db)
 }
 
-func ListReceipts(treatmentId string, db *gorm.DB) []Receipt {
+func ListReceipts(prescriptionId string, db *gorm.DB) []Receipt {
 	var rs []Receipt
-	db.Where("treatment_id = ?", treatmentId).Find(&rs)
+	db.Where("prescription_id = ?", prescriptionId).Find(&rs)
 	return rs
 }
 
-func FetchReceipt(treatmentId string, db *gorm.DB) Receipt {
+func FetchReceipt(prescriptionId string, db *gorm.DB) Receipt {
 	var r Receipt
-	db.Where("treatment_id = ?", treatmentId).First(&r)
+	db.Where("prescription_id = ?", prescriptionId).First(&r)
 	return r
 }
 

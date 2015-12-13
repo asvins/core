@@ -12,7 +12,7 @@ import (
 )
 
 func validateRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
-	rcpt := models.FetchReceipt(r.URL.Query().Get("treatment_id"), db)
+	rcpt := models.FetchReceipt(r.URL.Query().Get("prescription_id"), db)
 	if r.ParseForm() != nil {
 		return errors.BadRequest("Invalid input")
 	}
@@ -24,19 +24,19 @@ func validateRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 }
 
 func fetchRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
-	treatmentId := r.URL.Query().Get("treatment_id")
+	prescriptionId := r.URL.Query().Get("prescription_id")
 	rId := r.URL.Query().Get("receipt_id")
 	if rId == "" { //FETCH ALL: discovery
-		rs := models.ListReceipts(treatmentId, db)
+		rs := models.ListReceipts(prescriptionId, db)
 		rend.JSON(w, 200, rs)
 		return nil
 	}
-	http.ServeFile(w, r, "upload/"+treatmentId+"/"+rId)
+	http.ServeFile(w, r, "upload/"+prescriptionId+"/"+rId)
 	return nil
 }
 
 func uploadRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
-	treatmentId := r.URL.Query().Get("treatment_id")
+	prescriptionId := r.URL.Query().Get("prescription_id")
 	file, _, err := r.FormFile("receipt")
 	if err != nil {
 		fmt.Println(err)
@@ -45,13 +45,13 @@ func uploadRecipe(w http.ResponseWriter, r *http.Request) errors.Http {
 
 	defer file.Close()
 
-	id, _ := strconv.Atoi(treatmentId)
-	rcpt := &models.Receipt{TreatmentID: id, FilePath: "", Status: models.ReceiptStatusUndecided}
+	pid, _ := strconv.Atoi(prescriptionId)
+	rcpt := &models.Receipt{FilePath: "", Status: models.ReceiptStatusUndecided, PrescriptionId: pid}
 	rcpt.Create(db)
-	rcpt.FilePath = "upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID))
+	rcpt.FilePath = "upload/" + prescriptionId + "/" + strconv.Itoa(int(rcpt.ID))
 	rcpt.Save(db) // ID incremental :'(
-	os.MkdirAll("upload/"+treatmentId, 0777)
-	out, err := os.Create("upload/" + treatmentId + "/" + strconv.Itoa(int(rcpt.ID)))
+	os.MkdirAll("upload/"+prescriptionId, 0777)
+	out, err := os.Create("upload/" + prescriptionId + "/" + strconv.Itoa(int(rcpt.ID)))
 	fmt.Println(err)
 	_, err = io.Copy(out, file)
 	fmt.Println(err)

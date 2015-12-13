@@ -12,12 +12,13 @@ const (
 
 type Prescription struct {
 	Base
-	ID           int `json:"id"`
-	TreatmentId  int `json:"treatment_id"`
-	MedicationId int `json:"medication_id"`
-	StartingAt   int `json:"starting_at"`
-	FinishingAt  int `json:"finishing_at"`
-	Frequency    int `json:"frequency"`
+	ID           int     `json:"id"`
+	TreatmentId  int     `json:"treatment_id"`
+	MedicationId int     `json:"medication_id"`
+	StartingAt   int     `json:"starting_at"`
+	FinishingAt  int     `json:"finishing_at"`
+	Frequency    int     `json:"frequency"`
+	Receipt      Receipt `json:"receipt"`
 }
 
 func (p *Prescription) Save(db *gorm.DB) error {

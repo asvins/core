@@ -26,7 +26,6 @@ type Treatment struct {
 	FinishDate    int            `json:"finish_date"`
 	Email         string         `json:"email" sql:"-"`
 	Prescriptions []Prescription `json:"prescriptions"`
-	Receipts      []Receipt      `json:"receipts"`
 }
 
 func (t *Treatment) Save(db *gorm.DB) error {
@@ -50,19 +49,13 @@ func (t *Treatment) Retrieve(db *gorm.DB) ([]Treatment, error) {
 
 	for i, o := range ts {
 		prescriptions := []Prescription{}
-		receipts := []Receipt{}
 
 		if err := db.Model(o).Related(&prescriptions, "Prescriptions").Error; err != nil {
 			fmt.Println("[ERROR] ", err.Error())
 			return nil, err
 		}
-		if err := db.Model(o).Related(&receipts, "Receipts").Error; err != nil {
-			fmt.Println("[ERROR] ", err.Error())
-			return nil, err
-		}
 
 		o.Prescriptions = prescriptions
-		o.Receipts = receipts
 		ts[i] = o
 	}
 

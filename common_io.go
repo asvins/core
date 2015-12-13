@@ -85,6 +85,7 @@ func handleUserCreated(msg []byte) {
 
 		err = p.Save(db)
 
+		createFeedEvent(p)
 		return
 
 	case "medic":

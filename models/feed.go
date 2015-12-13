@@ -51,10 +51,17 @@ func NewEvent(i interface{}) *FeedEvent {
 
 	case "Patient":
 		p, _ := i.(Patient)
-		e.Title = "Dados Atualizados"
-		e.Description = "Os dados de sua conta foram atualizados com sucesso!"
-		e.Tags = "profile"
-		e.PatientID = p.ID
+		if p.CPF == "" {
+			e.Title = "Bem vindo ao Asvins!"
+			e.Description = "Cadastro realizado com sucesso!<br>Não esqueça de terminar seu cadastro!"
+			e.Tags = "profile"
+			e.PatientID = p.ID
+		} else {
+			e.Title = "Dados Atualizados"
+			e.Description = "Os dados de sua conta foram atualizados com sucesso!"
+			e.Tags = "profile"
+			e.PatientID = p.ID
+		}
 		break
 
 	case "Box":

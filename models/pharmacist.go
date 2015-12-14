@@ -11,6 +11,7 @@ type Pharmacist struct {
 	Name       string      `json:"name"`
 	CRF        string      `json:"crf" gorm:"column:crf"`
 	Email      string      `json:"email"`
+	Specialty  int         `json:"specialty"`
 	Treatments []Treatment `json:"treatments"`
 }
 

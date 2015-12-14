@@ -69,22 +69,22 @@ func NewEvent(i interface{}) *FeedEvent {
 		switch box.Status {
 		case om.BOX_DELIVERED:
 			e.Title = "Pedido Entregue"
-			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já está saiu para a entrega!"
+			e.Description = "Seu pedido de " + time.Unix(box.StartDate, 0).String() + " até " + time.Unix(box.EndDate, 0).String() + " já está saiu para a entrega!"
 			break
 
 		case om.BOX_SHIPED:
 			e.Title = "Pedido Enviado"
-			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já foi enviado pela transportadora!"
+			e.Description = "Seu pedido de " + time.Unix(box.StartDate, 0).String() + " até " + time.Unix(box.EndDate, 0).String() + " já foi enviado pela transportadora!"
 			break
 
 		case om.BOX_SCHEDULED:
 			e.Title = "Pedido Agendado"
-			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já foi agendado."
+			e.Description = "Seu pedido de " + time.Unix(box.StartDate, 0).String() + " até " + time.Unix(box.EndDate, 0).String() + " já foi agendado."
 			break
 
 		case om.BOX_PENDING:
 			e.Title = "Pedido Agendado"
-			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " Foi recebido. Termine seu cadastro para dar continuidade ao processo de envio!."
+			e.Description = "Seu pedido de " + time.Unix(box.StartDate, 0).String() + " até " + time.Unix(box.EndDate, 0).String() + " Foi recebido. Termine seu cadastro para dar continuidade ao processo de envio!."
 		}
 		e.Title = "Atualizações do Envio"
 		e.Tags = "shipment"

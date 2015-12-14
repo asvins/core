@@ -81,6 +81,10 @@ func NewEvent(i interface{}) *FeedEvent {
 			e.Title = "Pedido Agendado"
 			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " já foi agendado."
 			break
+
+		case om.BOX_PENDING:
+			e.Title = "Pedido Agendado"
+			e.Description = "Seu pedido de " + strconv.Itoa(box.StartDate) + " até " + strconv.Itoa(box.EndDate) + " Foi recebido. Termine seu cadastro para dar continuidade ao processo de envio!."
 		}
 		e.Title = "Atualizações do Envio"
 		e.Tags = "shipment"

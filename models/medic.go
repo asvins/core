@@ -2,9 +2,12 @@ package models
 
 import "github.com/jinzhu/gorm"
 
-// TODO
 const (
-	MEDIC_SPECIALTY_ = iota
+	MEDIC_SPECIALTY_ENDOCRINO = iota
+	MEDIC_SPECIALTY_GASTRO
+	MEDIC_SPECIALTY_GINECO
+	MEDIC_SPECIALTY_GENERAL
+	MEDIC_SPECIALTY_DERMATO
 )
 
 type Medic struct {

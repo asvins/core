@@ -12,7 +12,6 @@ const (
 
 type Medic struct {
 	Base
-	gorm.Model
 	ID         int    `json:"id"`
 	Name       string `json:"name" gorm:"column:name"`
 	CRM        string `json:"crm" gorm:"column:crm"`

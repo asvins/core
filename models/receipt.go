@@ -1,6 +1,10 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"fmt"
+
+	"github.com/jinzhu/gorm"
+)
 
 const (
 	ReceiptStatusUndecided = iota
@@ -9,7 +13,7 @@ const (
 )
 
 type Receipt struct {
-	gorm.Model
+	ID             int    `json:"id"`
 	PrescriptionId int    `json:"prescription_id"`
 	FilePath       string `json:"file_path" gorm:"column:file_path"`
 	Status         int    `json:"status" gorm:"column:status"`
@@ -34,9 +38,12 @@ func ListReceipts(prescriptionId string, db *gorm.DB) []Receipt {
 	return rs
 }
 
-func FetchReceipt(prescriptionId string, db *gorm.DB) Receipt {
-	var r Receipt
-	db.Where("prescription_id = ?", prescriptionId).First(&r)
+func FetchReceipt(prescriptionId int, db *gorm.DB) Receipt {
+	r := Receipt{}
+	if err := db.Where("prescription_id = ?", prescriptionId).First(&r).Error; err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		fmt.Println("[ERROR] Will return empty receipt")
+	}
 	return r
 }
 

@@ -92,7 +92,13 @@ func NewEvent(i interface{}) *FeedEvent {
 		e.PatientID = box.PatientId
 		break
 
-	case "Subscriber":
+	case "Treatment":
+		t, _ := i.(Treatment)
+		e.Title = "Tratamento Aprovado"
+		e.Description = "Seu Tratamento " + t.Title + " foi aprovado por um de nossos farmaceuticos!<br>Em breve sua box passará para o estado de produção!"
+		e.Tags = "profile"
+		e.PatientID = t.PatientId
+
 		break
 	default:
 		return nil

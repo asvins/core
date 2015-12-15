@@ -95,8 +95,11 @@ func validataTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
 		return errors.BadRequest(err.Error())
 	}
 
-	if err := db.Exec("UPDATE treatments SET status = 1 WHERE id = ?", id).Error; err != nil {
+	if err := db.Exec("UPDATE treatments SET status = 0 WHERE id = ?", id).Error; err != nil {
 		return errors.InternalServerError(err.Error())
 	}
+
+	t := models.Treatment{ID: id}
+	sendTreatmentApproved(&t)
 	return nil
 }

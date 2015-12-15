@@ -46,6 +46,7 @@ func setupCommonIo() {
 	consumer.HandleTopic("box_created", handleBoxCreated)
 	consumer.HandleTopic("subscription_updated", handleSubscriptionUpdated)
 	consumer.HandleTopic("activate_treatments", handleActivateTreatments)
+	consumer.HandleTopic("treatment_approved", handleTreatmentApproved)
 
 	if err = consumer.StartListening(); err != nil {
 		log.Fatal(err)
@@ -130,6 +131,27 @@ func handleActivateTreatments(msg []byte) {
 	}
 }
 
+func handleTreatmentApproved(msg []byte) {
+	t := models.Treatment{}
+	if err := json.Unmarshal(msg, &t); err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		return
+	}
+
+	ts, err := t.Retrieve(db)
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		return
+	}
+
+	if len(ts) != 1 {
+		fmt.Println("[ERROR] Not able to handle treatment approved msg... query for given id returned len != 1")
+		return
+	}
+
+	createFeedEvent(ts[0])
+}
+
 /*
 *	Senders
  */
@@ -194,7 +216,16 @@ func sendPatientUpdated(p *models.Patient) {
 	}
 
 	producer.Publish("patient_updated", b)
+}
 
+func sendTreatmentApproved(t *models.Treatment) {
+	b, err := json.Marshal(t)
+	if err != nil {
+		fmt.Println("[ERROR] ", err.Error())
+		return
+	}
+
+	producer.Publish("treatment_approved", b)
 }
 
 /*

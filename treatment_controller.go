@@ -88,3 +88,15 @@ func insertTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
 	rend.JSON(w, http.StatusOK, t)
 	return nil
 }
+
+func validataTreatment(w http.ResponseWriter, r *http.Request) errors.Http {
+	id, err := strconv.Atoi(r.URL.Query().Get("treatment_id"))
+	if err != nil {
+		return errors.BadRequest(err.Error())
+	}
+
+	if err := db.Exec("UPDATE treatments SET status = 1 WHERE id = ?", id).Error; err != nil {
+		return errors.InternalServerError(err.Error())
+	}
+	return nil
+}

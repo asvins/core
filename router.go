@@ -34,7 +34,7 @@ func DefRoutes() *router.Router {
 	r.Handle("/api/treatments/:id", router.PUT, updateTreatment, []router.Interceptor{})
 	r.Handle("/api/treatments/:id", router.DELETE, deleteTreatment, []router.Interceptor{})
 	r.Handle("/api/treatments", router.POST, insertTreatment, []router.Interceptor{})
-	r.Handle("/api/treatments/:treatment_id/ship", router.POST, DiscoveryHandler, []router.Interceptor{})
+	r.Handle("/api/treatments/:treatment_id/validate", router.POST, validataTreatment, []router.Interceptor{})
 
 	//RECEIPT
 	r.Handle("/api/receipt/:prescription_id", router.GET, fetchRecipe, []router.Interceptor{})
